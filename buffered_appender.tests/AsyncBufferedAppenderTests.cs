@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -13,7 +10,7 @@ using NUnit.Framework;
 namespace buffered_appender.tests
 {
     [TestFixture]
-    public class BufferedAppenderTests
+    public class AsyncBufferedAppenderTests
     {
         [SetUp]
         public void BeforeEach()
@@ -27,7 +24,7 @@ namespace buffered_appender.tests
             // Arrange
             var evaluator = new MyEvaluator();
 
-            var appender = new MyBufferedAppender(evaluator);
+            var appender = new MyAsyncBufferedAppender(evaluator);
             appender.ActivateOptions();
 
             ConfigureAppender(appender);
@@ -58,7 +55,7 @@ namespace buffered_appender.tests
              */
 
             // Arrange
-            var appender = new MyBufferedAppender {BufferSize = 3};
+            var appender = new MyAsyncBufferedAppender { BufferSize = 3 };
             appender.ActivateOptions();
 
             ConfigureAppender(appender);
@@ -77,6 +74,8 @@ namespace buffered_appender.tests
             Assert.That(MessageSink.Logs.Count, Is.EqualTo(4),"The fourth message should trigger the Send event since the buffer size of 3 is full");
 
             StopApplication();
+
+            Thread.Sleep(1000);
             Assert.That(MessageSink.Logs.Count, Is.EqualTo(5),"All remaining messages should be sent at the end");
         }
 
@@ -97,7 +96,7 @@ namespace buffered_appender.tests
             */
             // Arrange
             const int oneSecond = 1;
-            var appender = new MyBufferedAppender(new TimeEvaluator(oneSecond));
+            var appender = new MyAsyncBufferedAppender(new TimeEvaluator(oneSecond));
             appender.ActivateOptions();
 
             ConfigureAppender(appender);
@@ -115,6 +114,7 @@ namespace buffered_appender.tests
             Thread.Sleep(twoSeconds);
             logger.InfoFormat("Message 4");
 
+            Thread.Sleep(twoSeconds);
             var messagesAfterWait = MessageSink.Logs.ToList();
 
             logger.InfoFormat("Message 5");

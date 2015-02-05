@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using log4net.Core;
 
@@ -19,12 +18,11 @@ namespace buffered_appender
 
         protected override void SendBuffer(LoggingEvent[] events)
         {
-            MessageSink.Logs.AddRange(events);
+            foreach (var loggingEvent in events)
+            {
+                MessageSink.Logs.Add(loggingEvent);
+            }
+           
         }
-    }
-
-    public class MessageSink
-    {
-        public static List<LoggingEvent> Logs = new List<LoggingEvent>(); 
     }
 }
