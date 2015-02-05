@@ -28,15 +28,11 @@ namespace buffered_appender.tests
         public void SynchronousAppender_Send_MeasurePerformance(int bufferSize, int messageCount,AppenderType appenderType)
         {
             // Arrange
-            BufferingAppenderSkeleton appender;
-            if (appenderType == AppenderType.Synchronous)
+            var appender = new MyBufferedAppender
             {
-                appender = new MyBufferedAppender {BufferSize = bufferSize};
-            }
-            else
-            {
-                appender = new MyAsyncBufferedAppender { BufferSize = bufferSize };
-            }
+                BufferSize = bufferSize,
+                SendAsync = appenderType == AppenderType.Asynchronous
+            };
 
             appender.ActivateOptions();
 
@@ -65,7 +61,7 @@ namespace buffered_appender.tests
 
             Assert.That(MessageSink.Logs.Count,Is.EqualTo(messageCount),"Not all the messages were sent!");
 
-            Console.WriteLine("BufferSize:{0}|MessageCount:{1}|Time(seconds):{2}",bufferSize,messageCount,stopWatch.Elapsed.TotalSeconds);
+            Console.WriteLine("Type:{3}|BufferSize:{0}|MessageCount:{1}|Time(seconds):{2}",bufferSize,messageCount,stopWatch.Elapsed.TotalSeconds,appenderType);
             
         }
 

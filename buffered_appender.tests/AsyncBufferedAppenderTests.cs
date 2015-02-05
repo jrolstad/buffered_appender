@@ -24,7 +24,7 @@ namespace buffered_appender.tests
             // Arrange
             var evaluator = new MyEvaluator();
 
-            var appender = new MyAsyncBufferedAppender(evaluator);
+            var appender = new MyBufferedAppender(evaluator){SendAsync = true};
             appender.ActivateOptions();
 
             ConfigureAppender(appender);
@@ -48,6 +48,7 @@ namespace buffered_appender.tests
             /*
              <appender name="BufferingForwardingAppender" type="buffered_appender.MyBufferedAppender">
               <bufferSize value="3" />
+              <param name="SendAsync" value="true"/>
               <Fix value="0"/> <!-- Set Fix flag to NONE -->
              </appender>
               
@@ -55,7 +56,7 @@ namespace buffered_appender.tests
              */
 
             // Arrange
-            var appender = new MyAsyncBufferedAppender { BufferSize = 3 };
+            var appender = new MyBufferedAppender{ BufferSize = 3,SendAsync = true};
             appender.ActivateOptions();
 
             ConfigureAppender(appender);
@@ -85,7 +86,7 @@ namespace buffered_appender.tests
             /*
             <appender name="BufferingForwardingAppender" type="buffered_appender.MyBufferedAppender">
              <bufferSize value="3" />
-             
+             <param name="SendAsync" value="true"/>
               <evaluator type="log4net.Core.TimeEvaluator">
                 <threhold value="1"/>
               </evaluator>
@@ -96,7 +97,7 @@ namespace buffered_appender.tests
             */
             // Arrange
             const int oneSecond = 1;
-            var appender = new MyAsyncBufferedAppender(new TimeEvaluator(oneSecond));
+            var appender = new MyBufferedAppender(new TimeEvaluator(oneSecond)){SendAsync = true};
             appender.ActivateOptions();
 
             ConfigureAppender(appender);

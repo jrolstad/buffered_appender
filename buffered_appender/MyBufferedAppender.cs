@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using log4net.Core;
 
 namespace buffered_appender
@@ -16,13 +18,27 @@ namespace buffered_appender
             this.Evaluator = evaluator;
         }
 
+        public bool SendAsync { get; set; }
+
         protected override void SendBuffer(LoggingEvent[] events)
+        {
+            if (SendAsync)
+            {
+                Task.Run(()=> { SendMessages(events); });
+            }
+            else
+            {
+                SendMessages(events);
+            }
+
+        }
+
+        private static void SendMessages(LoggingEvent[] events)
         {
             foreach (var loggingEvent in events)
             {
                 MessageSink.Logs.Add(loggingEvent);
             }
-           
         }
     }
 }

@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageSink.cs" />
-    <Compile Include="MyAsyncBufferedAppender.cs" />
     <Compile Include="MyBufferedAppender.cs" />
     <Compile Include="MyEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
