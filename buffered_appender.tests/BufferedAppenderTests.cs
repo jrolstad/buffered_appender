@@ -47,6 +47,15 @@ namespace buffered_appender.tests
         [Test]
         public void Send_WithDefaultEvaluator_SendsAllMessages()
         {
+            /*
+             <appender name="BufferingForwardingAppender" type="buffered_appender.MyBufferedAppender">
+              <bufferSize value="3" />
+              <Fix value="0"/> <!-- Set Fix flag to NONE -->
+             </appender>
+              
+             see http://stackoverflow.com/questions/11319319/log4net-bufferingforwardingappender-performance-issue
+             */
+
             // Arrange
             var appender = new MyBufferedAppender {BufferSize = 3};
             appender.ActivateOptions();
@@ -73,6 +82,18 @@ namespace buffered_appender.tests
         [Test]
         public void Send_WithTimeEvaluator_SendsAllMessages()
         {
+            /*
+            <appender name="BufferingForwardingAppender" type="buffered_appender.MyBufferedAppender">
+             <bufferSize value="3" />
+             
+              <evaluator type="log4net.Core.TimeEvaluator">
+                <threhold value="1"/>
+              </evaluator>
+             
+            </appender>
+              
+            see http://stackoverflow.com/questions/11319319/log4net-bufferingforwardingappender-performance-issue
+            */
             // Arrange
             const int oneSecond = 1;
             var appender = new MyBufferedAppender(new TimeEvaluator(oneSecond));
@@ -104,7 +125,6 @@ namespace buffered_appender.tests
             Assert.That(messagesAfterWait.Count, Is.EqualTo(4), "The first four should be sent");
             Assert.That(MessageSink.Logs.Count, Is.EqualTo(5), "All remaining messages should be sent at the end");
         }
-
 
         private static void StopApplication()
         {
