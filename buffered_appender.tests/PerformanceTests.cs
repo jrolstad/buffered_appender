@@ -19,10 +19,10 @@ namespace buffered_appender.tests
         }
 
         [Test]
-        [TestCase(5,1000,AppenderType.Asynchronous)]
-        [TestCase(5,1000,AppenderType.Synchronous)]
         [TestCase(1,1000,AppenderType.Asynchronous)]
         [TestCase(1,1000,AppenderType.Synchronous)]
+        [TestCase(5, 1000, AppenderType.Asynchronous)]
+        [TestCase(5, 1000, AppenderType.Synchronous)]
         [TestCase(10,1000,AppenderType.Asynchronous)]
         [TestCase(10,1000,AppenderType.Synchronous)]
         public void SynchronousAppender_Send_MeasurePerformance(int bufferSize, int messageCount,AppenderType appenderType)

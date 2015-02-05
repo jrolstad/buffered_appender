@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace buffered_appender
 
         }
 
-        private static void SendMessages(LoggingEvent[] events)
+        private static void SendMessages(IEnumerable<LoggingEvent> events)
         {
             foreach (var loggingEvent in events)
             {
